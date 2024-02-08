@@ -14,7 +14,7 @@ from model.wide_resnet import WideResNet
 EXP_NAME = 'sac'  # sac, ppo
 DATASET = 'ImageNetC'  # CIFAR100C, ImageNetC, DomainNet126
 
-CUR_DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
+CUR_DEVICE = "cuda:1" if torch.cuda.is_available() else "cpu"
 
 if DATASET in ['ImageNetC', 'CIFAR100C']:
     SEVERITY = 1
@@ -39,9 +39,9 @@ if EXP_NAME == 'sac':
     LR = 1e-4  # 5e-4
     GAMMA = 0.9  # 0.9
 
-    NAME = f'Sample-wise_{DATASET}_sac_{LOSS_SCALE}loss_({SOURCE_DOMAIN}){SEVERITY}'
+    NAME = f'Sample-wise_{DATASET}_sac_{LOSS_SCALE}loss_({SOURCE_DOMAIN}){SEVERITY}_ReP{REPLAY_SIZE, REPLAY_BS}'
 
-WORK_DIR = '/home/yxue/model_fusion_drl/results_all/'
+WORK_DIR = 'results_all/'
 OPT_DIR = os.path.join(WORK_DIR, NAME)
 
 LEN_SET_DomainNet = {

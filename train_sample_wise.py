@@ -4,7 +4,7 @@ import os
 import numpy as np
 from rl.sac import sac
 from rl.ppo import ppo
-from common_sample_wise import OPT_DIR, check_exist_dir_path, SEED, TARGET_DOMAIN, REPLAY_BS, LR, SOURCE_DOMAIN, SEVERITY, EXP_NAME
+from common_sample_wise import OPT_DIR, check_exist_dir_path, SEED, TARGET_DOMAIN, REPLAY_BS, LR, EXP_NAME
 
 from env.env_train_imagenetc_sample_wise import Env_train_imagenetc_sample_wise
 
@@ -27,7 +27,7 @@ except:
 logger_kwargs = {'output_dir': opt_directory, 'exp_name':EXP_NAME}
 
 if EXP_NAME == 'sac':
-    from common import START_STEPS, UPDATE_AFTER, UPDATE_EVERY, GAMMA, REPLAY_SIZE
+    from common_sample_wise import START_STEPS, UPDATE_AFTER, UPDATE_EVERY, GAMMA, REPLAY_SIZE
     sac(
         train_env_fn=train_env, test_env_fn=None,  
         ac_kwargs={}, 
