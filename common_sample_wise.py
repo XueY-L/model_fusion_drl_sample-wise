@@ -14,7 +14,7 @@ from model.wide_resnet import WideResNet
 EXP_NAME = 'sac'  # sac, ppo
 DATASET = 'ImageNetC'  # CIFAR100C, ImageNetC, DomainNet126
 
-CUR_DEVICE = "cuda:1" if torch.cuda.is_available() else "cpu"
+CUR_DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
 
 if DATASET in ['ImageNetC', 'CIFAR100C']:
     SEVERITY = 1

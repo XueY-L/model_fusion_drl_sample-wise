@@ -75,35 +75,17 @@ class Env_train_imagenetc_sample_wise(gym.Env):
         self.f.write(f't={[self.t, self.t]}\t')
         self.f.write(f'{weights}\n')
 
-        # 加入每个源域的推理结果
-        all_logits = [rst]
-        with torch.no_grad():
-            for p in self.param_ls:
-                self.model.load_state_dict(p)
-                self.model.eval()
-                all_logits.append(self.model(self.batch_data))
-
-        return rst, weights, torch.stack(all_logits)
+        return rst, weights
 
     def _get_reward(self, act):
-        rst, weights, all_logits = self.get_results(act)
+        rst, weights = self.get_results(act)
         weights = torch.squeeze(weights, 0)  # 在第0维的维度是1时，去掉第0维的维度
-        all_logits = torch.squeeze(all_logits)  # 去掉值为1的维度
-        # print(all_logits.size(), rst.size())  # [6, 345], [1, 345]
         
         # 融合模型的结果
         _, predicted_f = torch.max(rst.data, 1)
         correct_f = predicted_f.eq(self.batch_label.data).cpu().sum()
         top1_f = correct_f / rst.size(0)
         self.cnt_f += correct_f
-
-        # 源模型集成的结果
-        rst_ensemble = torch.zeros(rst.size()).to(CUR_DEVICE)
-        for i in range(1, all_logits.size(0)):
-            rst_ensemble += ( 1 / (all_logits.size(0)-1) ) * all_logits[i]
-        _, predicted_ensemble = torch.max(rst_ensemble.data, 1)
-        correct_ensemble = predicted_ensemble.eq(self.batch_label.data).cpu().sum()
-        self.cnt_ensemble += correct_ensemble
 
         # ------TTA loss作为reward-----
         tent_loss = -(rst.softmax(1) * rst.log_softmax(1)).sum(1).mean(0)
