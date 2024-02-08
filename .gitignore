@@ -1,0 +1,6 @@
+results_all/
+__pycache__/
+
+*.pt
+*.pth
+*.npz
